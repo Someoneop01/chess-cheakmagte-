@@ -207,3 +207,45 @@ button:hover{background:#285c80}
     left: 46%;
     font-size: 145px;
 }
+
+/* Fast Certificate PDF Printing */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  .no-print,
+  .controls,
+  .form-section {
+    display: none !important;
+  }
+
+  #certificate {
+    page-break-after: always;
+    break-after: page;
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  img {
+    animation: none !important;
+    transition: none !important;
+  }
+}
