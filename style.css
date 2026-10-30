@@ -657,24 +657,24 @@ button:disabled {
 
 /* 1. BDCA LOGO */
 .logo-row img[src*="bdca.png"] {
-    width: 95px !important;
-    height: 65px !important;
+    width: 100px !important;
+    height: 85px !important;
 }
 
 /* 2. ABCA LOGO */
 .logo-row img[src*="abca.png"] {
     width: 100px !important;
-    height: 65px !important;
+    height: 85px !important;
 }
 
 /* 3. FIDE LOGO */
 .logo-row img[src*="fide.png"] {
-    width: 130px !important;
+    width: 85px !important;
     height: 65px !important;
 }
 
 /* 4. AICF / GOLDEN CROWN LOGO */
 .logo-row img[src*="golden-crown.png"] {
-    width: 110px !important;
+    width: 85px !important;
     height: 65px !important;
 }
