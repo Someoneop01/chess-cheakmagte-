@@ -657,3 +657,9 @@ button:disabled {
         transition: none !important;
     }
 }
+/* ONLY BDCA LOGO SIZE */
+.logo-row img[src*="bdca.png"] {
+    width: 150px !important;
+    height: 90px !important;
+    object-fit: contain !important;
+}
