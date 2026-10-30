@@ -235,10 +235,10 @@ button:disabled {
 }
 
 .logo-row img {
-    width: 130px;
-    height: 65px;
-    max-width: 130px;
-    max-height: 65px;
+    width: 120px;
+    height: 85px;
+    max-width: 120px;
+    max-height: 85px;
     object-fit: contain;
 }
 
