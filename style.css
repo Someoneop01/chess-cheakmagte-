@@ -223,25 +223,6 @@ button:disabled {
     font-size: 145px;
 }
 
-/* LOGOS */
-
-.logo-row {
-    height: 65px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    gap: 15px;
-    margin-bottom: 0;
-}
-
-.logo-row img {
-    width: 65px;
-    height: 45px;
-    max-width: 65px;
-    max-height: 45px;
-    object-fit: contain;
-}
-
 /* TOURNAMENT HEADING */
 
 .tournament-heading {
@@ -657,9 +638,43 @@ button:disabled {
         transition: none !important;
     }
 }
-/* ONLY BDCA LOGO SIZE */
-.logo-row img[src*="bdca.png"] {
-    width: 150px !important;
-    height: 90px !important;
+/* LOGO ROW */
+.logo-row {
+    height: 75px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    gap: 15px !important;
+    margin-bottom: 0 !important;
+}
+
+/* COMMON LOGO SETTINGS */
+.logo-row img {
     object-fit: contain !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+/* 1. BDCA LOGO */
+.logo-row img[src*="bdca.png"] {
+    width: 95px !important;
+    height: 65px !important;
+}
+
+/* 2. ABCA LOGO */
+.logo-row img[src*="abca.png"] {
+    width: 100px !important;
+    height: 65px !important;
+}
+
+/* 3. FIDE LOGO */
+.logo-row img[src*="fide.png"] {
+    width: 130px !important;
+    height: 65px !important;
+}
+
+/* 4. AICF / GOLDEN CROWN LOGO */
+.logo-row img[src*="golden-crown.png"] {
+    width: 110px !important;
+    height: 65px !important;
 }
