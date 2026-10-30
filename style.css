@@ -657,14 +657,14 @@ button:disabled {
 
 /* 1. BDCA LOGO */
 .logo-row img[src*="bdca.png"] {
-    width: 75px !important;
+    width: 65px !important;
     height: 70px !important;
 }
 
 /* 2. ABCA LOGO */
 .logo-row img[src*="abca.png"] {
-    width: 75px !important;
-    height: 70px !important;
+    width: 55px !important;
+    height: 65px !important;
 }
 
 /* 3. FIDE LOGO */
