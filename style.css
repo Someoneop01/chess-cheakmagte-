@@ -721,7 +721,7 @@ img[src*="sing3.png"] {
     object-fit: contain !important;
 }
 img[src*="sing3.png"] {
-    width: 200px !important;
-    height: 120px !important;
+    width: 300px !important;
+    height: 180px !important;
     object-fit: fill !important;
 }
