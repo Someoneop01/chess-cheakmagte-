@@ -678,3 +678,15 @@ button:disabled {
     width: 85px !important;
     height: 65px !important;
 }
+/* VENUE & DATE SPACING FIX */
+.event-details {
+    margin-top: 0px !important;
+    margin-bottom: 5px !important;
+    line-height: 1.3 !important;
+    gap: 4px !important;
+}
+
+.event-details p {
+    margin: 3px 0 !important;
+    line-height: 1.3 !important;
+}
