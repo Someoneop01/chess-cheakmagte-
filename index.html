@@ -1,149 +1,399 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anga Open Chess Tournament Certificate</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+const fields = [
+  ["player", "outPlayer", "PLAYER NAME"],
+  ["fideId", "outFideId", "—"],
+  ["eventCode", "outEventCode", "—"],
+  ["serial", "outSerial", "001"],
+  ["state", "outState", "—"],
+  ["points", "outPoints", "—"],
+  ["rounds", "outRounds", "9"],
+  ["rank", "outRank", "—"],
+  ["dates", "outDates", "________________"],
+  ["venue", "outVenue", "________________"]
+];
 
-<header class="controls">
-  <h1>♟ Checkmate Championship</h1>
-  <p>Professional Chess Certificate Generator</p>
+const get = id => document.getElementById(id);
 
-  <div class="form-grid">
-    <label>Player Name<input id="player" placeholder="Enter player name"></label>
-    <label>FIDE ID<input id="fideId" placeholder="Enter FIDE ID"></label>
-    <label>Event Code<input id="eventCode" placeholder="Enter event code"></label>
-    <label>Certificate Serial Number<input id="serial" value="001"></label>
-    <label>Player State / City<input id="state" placeholder="Enter state or city"></label>
-    <label>Points Scored<input id="points" placeholder="e.g. 6.5"></label>
-    <label>Total Rounds<input id="rounds" placeholder="e.g. 9"></label>
-    <label>Final Rank<input id="rank" placeholder="e.g. 1st"></label>
-    <label>Tournament Dates<input id="dates" placeholder="Enter dates"></label>
-    <label>Venue<input id="venue" placeholder="Enter venue"></label>
-  </div>
+function val(id, fallback = "—") {
+  return get(id)?.value.trim() || fallback;
+}
 
-  <div class="bulk-label">
-    <label for="bulkPlayers">Bulk Players — one player per line</label>
-    <textarea id="bulkPlayers" rows="5" placeholder="Name | FIDE ID | Event Code | Serial | State/City | Points | Rounds | Rank"></textarea>
-  </div>
+function updateWording(root = document) {
+  const text = (id, value) => {
+    const el = root.querySelector("#" + id);
+    if (el) el.textContent = value;
+  };
 
-  <div class="import-section">
-    <label for="playerFile">Import Players from CSV</label>
-    <input type="file" id="playerFile" accept=".csv">
-    <button type="button" id="downloadTemplateBtn">Download CSV Template</button>
-    <p id="importStatus" role="status"></p>
-    <div id="validationReport"></div>
-  </div>
+  text("outNameInText", root.querySelector("#outPlayer")?.textContent || "PLAYER NAME");
+  text("outStateInText", root.querySelector("#outState")?.textContent || "STATE / CITY");
+  text("outPointsInText", root.querySelector("#outPoints")?.textContent || "—");
+  text("outRoundsInText", root.querySelector("#outRounds")?.textContent || "9");
+  text("outRankInText", root.querySelector("#outRank")?.textContent || "—");
+}
 
-  <p class="help">Bulk format: Name | FIDE ID | Event Code | Serial | State/City | Points | Rounds | Rank. Dates and venue come from the fields above.</p>
+function updateCertificate(root = document) {
+  fields.forEach(([inputId, outputId, fallback]) => {
+    const output = root.querySelector("#" + outputId);
+    if (output) output.textContent = val(inputId, fallback);
+  });
+  updateWording(root);
+}
 
-  <div class="buttons">
-    <button type="button" id="updateBtn">Update Preview</button>
-    <button type="button" id="generateBtn">Generate All Certificates</button>
-    <button type="button" id="printBtn">Print / Save All as PDF</button>
-    <button type="button" id="resetBtn">Reset Details</button>
-  </div>
-  <p id="status" role="status">Ready.</p>
-</header>
+function parsePlayers(text) {
+  return text.split(/\r?\n/).map(line => line.trim()).filter(Boolean).map(line => {
+    const p = line.split("|").map(v => v.trim());
+    return {
+      player: p[0] || "",
+      fideId: p[1] || "",
+      eventCode: p[2] || "",
+      serial: p[3] || "",
+      state: p[4] || "",
+      points: p[5] || "",
+      rounds: p[6] || val("rounds", "9"),
+      rank: p[7] || ""
+    };
+  }).filter(p => p.player);
+}
 
-<div id="previewArea">
-  <main class="certificate" id="certificate">
-    <div class="watermark watermark-one">♞</div>
-    <div class="watermark watermark-two">♜</div>
-    <div class="watermark watermark-three">♝</div>
-    <div class="watermark watermark-four">♛</div>
+function makeCertificate(player = {}) {
+  const page = get("certificate").cloneNode(true);
+  page.removeAttribute("id");
 
-    <div class="inner-border">
-      <div class="corner corner-tl">✦</div>
-      <div class="corner corner-tr">✦</div>
-      <div class="corner corner-bl">✦</div>
-      <div class="corner corner-br">✦</div>
+  fields.forEach(([inputId, outputId, fallback]) => {
+    const output = page.querySelector("#" + outputId);
+    if (!output) return;
 
-      <div class="logo-row">
-        <img src="./bdca.png" alt="Bhagalpur District Chess Association">
-        <img src="./abca.png" alt="All Bihar Chess Association">
-        <img src="./fide.png" alt="FIDE">
-        <img src="./golden-crown.png" alt="Golden Crown">
-      </div>
+    const value = Object.prototype.hasOwnProperty.call(player, inputId)
+      ? player[inputId]
+      : val(inputId, fallback);
 
-      <section class="tournament-heading">
-        <p class="eyebrow">OFFICIAL TOURNAMENT CERTIFICATE</p>
-        <h1>1st Trial of Anga Open<br>FIDE Rapid Rating Chess Tournament 2026</h1>
-        <div class="heading-line"></div>
-        <p class="organized">ORGANIZED BY</p>
-        <h2>BHAGALPUR DISTRICT CHESS ASSOCIATION</h2>
-        <p class="aegis">Under the Aegis of AICF and All Bihar Chess Association</p>
-        <p class="event-code">EVENT CODE: <span id="outEventCode">—</span></p>
-      </section>
+    output.textContent = value || fallback;
+  });
 
-      <section class="certificate-content">
-        <h2 class="certificate-title">CERTIFICATE OF PARTICIPATION</h2>
-        <p class="presented">This certificate is proudly presented to</p>
-        <h3 class="player-name" id="outPlayer">PLAYER NAME</h3>
-        <div class="name-line"></div>
-        <p class="paragraph">
-          In recognition of participation in the 1st Trial of Anga Open
-          FIDE Rapid Rating Chess Tournament 2026, organized by
-          Bhagalpur District Chess Association under the aegis of AICF
-          and All Bihar Chess Association.
-        </p>
-      </section>
+  updateWording(page);
+  return page;
+}
 
-      <section class="player-details">
-        <div class="detail"><span>FIDE ID</span><strong id="outFideId">—</strong></div>
-        <div class="detail"><span>STATE / CITY</span><strong id="outState">—</strong></div>
-        <div class="detail"><span>POINTS</span><strong id="outPoints">—</strong></div>
-        <div class="detail"><span>TOTAL ROUNDS</span><strong id="outRounds">—</strong></div>
-        <div class="detail"><span>FINAL RANK</span><strong id="outRank">—</strong></div>
-      </section>
+function safeName(name) {
+  return String(name || "Player")
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, "_")
+    .replace(/\s+/g, "_")
+    .slice(0, 70);
+}
 
-      <section class="event-details">
-        <p><strong>VENUE:</strong> <span id="outVenue">________________</span></p>
-        <p><strong>TOURNAMENT DATES:</strong> <span id="outDates">________________</span></p>
-      </section>
+function csvParse(text) {
+  const rows = [];
+  let row = [], cell = "", quoted = false;
 
-      <section class="signature-row">
-        <div class="signature-box">
-          <img src="./sign1.png" class="signature-image" alt="Signature of Dharmendra Kumar">
-          <h4>Mr. Dharmendra Kumar</h4>
-          <p>Hon'ble Secretary</p>
-          <p>All Bihar Chess Association</p>
-        </div>
-        <div class="signature-box">
-          <img src="./sign2.png" class="signature-image" alt="Signature of Ajay Kumar Singh">
-          <h4>Dr. Ajay Kumar Singh</h4>
-          <p>Hon'ble President</p>
-          <p>Bhagalpur District Chess Association</p>
-        </div>
-        <div class="signature-box">
-          <img src="./sign3.png" class="signature-image" alt="Signature of Ajay Kumar Mishra">
-          <h4>Mr. Ajay Kumar Mishra</h4>
-          <p>Hon'ble Secretary</p>
-          <p>Bhagalpur District Chess Association</p>
-        </div>
-        <div class="signature-box">
-          <img src="./sign4.png" class="signature-image" alt="Signature of Jyoti Shankar Nanda">
-          <h4>IA Jyoti Shankar Nanda</h4>
-          <p>Chief Arbiter</p>
-        </div>
-      </section>
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
 
-      <footer class="certificate-footer">
-        <span>CERTIFICATE NO. <strong id="outSerial">001</strong></span>
-        <span>CHECKMATE CHAMPIONSHIP</span>
-      </footer>
-    </div>
-  </main>
-</div>
+    if (ch === '"' && quoted && text[i + 1] === '"') {
+      cell += '"';
+      i++;
+    } else if (ch === '"') {
+      quoted = !quoted;
+    } else if (ch === "," && !quoted) {
+      row.push(cell.trim());
+      cell = "";
+    } else if ((ch === "\n" || ch === "\r") && !quoted) {
+      if (ch === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell.trim());
+      if (row.some(Boolean)) rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += ch;
+    }
+  }
 
-<section id="printPages"></section>
-<script src="script.js"></script>
-</body>
-</html>
+  row.push(cell.trim());
+  if (row.some(Boolean)) rows.push(row);
+  return rows;
+}
+
+function importCSV(text) {
+  const rows = csvParse(text);
+  if (!rows.length) throw new Error("CSV file is empty.");
+
+  const header = rows[0].map(x => x.toLowerCase());
+  const expected = ["name", "fide id", "event code", "serial", "state/city", "points", "rounds", "rank"];
+  const hasHeader = header.some(x => ["name", "player", "player name"].includes(x));
+
+  const data = hasHeader ? rows.slice(1) : rows;
+  const lines = data.map(row => {
+    const aliases = {
+      name: ["name", "player", "player name"],
+      "fide id": ["fide id", "fideid"],
+      "event code": ["event code", "eventcode"],
+      serial: ["serial", "serial number"],
+      "state/city": ["state/city", "state", "city"],
+      points: ["points", "points scored"],
+      rounds: ["rounds", "total rounds"],
+      rank: ["rank", "final rank"]
+    };
+
+    const cells = hasHeader
+      ? expected.map(key => {
+          const idx = header.findIndex(h => aliases[key].includes(h));
+          return idx >= 0 ? (row[idx] || "") : "";
+        })
+      : row.slice(0, 8);
+
+    while (cells.length < 8) cells.push("");
+    return cells.join(" | ");
+  }).filter(line => line.split("|")[0].trim());
+
+  if (!lines.length) throw new Error("No player names found in CSV.");
+
+  get("bulkPlayers").value = lines.join("\n");
+  get("importStatus").textContent = `${lines.length} players imported.`;
+  get("validationReport").textContent = "Check the imported rows, then click Generate All Certificates.";
+}
+
+function getPreparedPlayers() {
+  const players = parsePlayers(get("bulkPlayers").value);
+  const start = Math.max(1, parseInt(val("serial", "1"), 10) || 1);
+
+  return players.map((player, index) => ({
+    ...player,
+    serial: player.serial || String(start + index).padStart(3, "0"),
+    rounds: player.rounds || val("rounds", "9")
+  }));
+}
+
+function makePdfDocument() {
+  if (!window.jspdf?.jsPDF) {
+    throw new Error("PDF library did not load. Check your internet connection and refresh.");
+  }
+
+  return new window.jspdf.jsPDF({
+    orientation: "landscape",
+    unit: "mm",
+    format: "a4",
+    compress: true
+  });
+}
+
+async function waitForImages(element) {
+  if (document.fonts?.ready) await document.fonts.ready;
+
+  const images = [...element.querySelectorAll("img")];
+  await Promise.all(images.map(async img => {
+    if (!img.complete) {
+      await new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }
+    if (img.decode) {
+      try { await img.decode(); } catch (_) {}
+    }
+  }));
+}
+
+async function certificateToPdfBlob(player) {
+  if (!window.html2canvas) {
+    throw new Error("PDF image library did not load. Check your internet connection.");
+  }
+
+  const stage = document.createElement("div");
+  stage.style.cssText = [
+    "position:fixed",
+    "left:0",
+    "top:0",
+    "width:1123px",
+    "height:794px",
+    "z-index:-9999",
+    "overflow:hidden",
+    "background:#ffffff"
+  ].join(";");
+
+  const certificate = makeCertificate(player);
+  certificate.style.margin = "0";
+  certificate.style.width = "1123px";
+  certificate.style.height = "794px";
+  certificate.style.boxShadow = "none";
+
+  stage.appendChild(certificate);
+  document.body.appendChild(stage);
+
+  try {
+    await waitForImages(certificate);
+
+    const canvas = await html2canvas(certificate, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+      useCORS: true,
+      logging: false,
+      width: 1123,
+      height: 794
+    });
+
+    const image = canvas.toDataURL("image/jpeg", 0.95);
+    const pdf = makePdfDocument();
+
+    pdf.addImage(image, "JPEG", 0, 0, 297, 210, undefined, "FAST");
+
+    return pdf.output("blob");
+  } finally {
+    stage.remove();
+  }
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
+get("updateBtn")?.addEventListener("click", () => {
+  updateCertificate();
+  get("status").textContent = "Preview updated.";
+});
+
+get("generateBtn")?.addEventListener("click", () => {
+  updateCertificate();
+
+  const players = getPreparedPlayers();
+  const pages = get("printPages");
+  pages.replaceChildren();
+
+  if (!players.length) {
+    get("status").textContent = "Enter at least one player in Bulk Players.";
+    return;
+  }
+
+  players.forEach(player => pages.appendChild(makeCertificate(player)));
+  get("status").textContent = `${players.length} certificates generated.`;
+});
+
+get("downloadOneBtn")?.addEventListener("click", async () => {
+  try {
+    updateCertificate();
+    get("status").textContent = "Creating PDF...";
+
+    const player = {
+      player: val("player", "PLAYER"),
+      serial: val("serial", "001")
+    };
+
+    const blob = await certificateToPdfBlob(player);
+    downloadBlob(blob, `${safeName(player.player)}_Certificate.pdf`);
+
+    get("status").textContent = "Certificate PDF downloaded.";
+  } catch (error) {
+    console.error(error);
+    get("status").textContent = error.message || "PDF download failed.";
+  }
+});
+
+get("downloadZipBtn")?.addEventListener("click", async () => {
+  const players = getPreparedPlayers();
+
+  if (!players.length) {
+    get("status").textContent = "Import or enter players first.";
+    return;
+  }
+
+  if (!window.JSZip) {
+    get("status").textContent = "ZIP library did not load. Check your internet connection.";
+    return;
+  }
+
+  const button = get("downloadZipBtn");
+  button.disabled = true;
+
+  try {
+    const zip = new JSZip();
+
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+
+      get("status").textContent =
+        `Creating PDF ${i + 1} of ${players.length}: ${player.player}`;
+
+      const blob = await certificateToPdfBlob(player);
+      const filename =
+        `${String(i + 1).padStart(3, "0")}_${safeName(player.player)}_Certificate.pdf`;
+
+      zip.file(filename, blob);
+    }
+
+    get("status").textContent = "Preparing ZIP file...";
+
+    const zipBlob = await zip.generateAsync({
+      type: "blob",
+      compression: "DEFLATE",
+      compressionOptions: { level: 3 }
+    });
+
+    downloadBlob(zipBlob, "Checkmate_Championship_Certificates.zip");
+    get("status").textContent = `${players.length} PDFs downloaded in one ZIP.`;
+  } catch (error) {
+    console.error(error);
+    get("status").textContent = error.message || "ZIP creation failed.";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+get("printBtn")?.addEventListener("click", () => {
+  const pages = get("printPages");
+
+  if (!pages.children.length) {
+    updateCertificate();
+    pages.replaceChildren(makeCertificate());
+  }
+
+  window.print();
+});
+
+get("resetBtn")?.addEventListener("click", () => {
+  [
+    "player", "fideId", "eventCode", "state", "points",
+    "rank", "dates", "venue", "bulkPlayers"
+  ].forEach(id => {
+    if (get(id)) get(id).value = "";
+  });
+
+  get("serial").value = "001";
+  get("rounds").value = "9";
+  get("printPages").replaceChildren();
+
+  updateCertificate();
+  get("status").textContent = "Details reset.";
+  get("importStatus").textContent = "";
+  get("validationReport").textContent = "";
+});
+
+get("downloadTemplateBtn")?.addEventListener("click", () => {
+  const csv = "Name,FIDE ID,Event Code,Serial,State/City,Points,Rounds,Rank\n";
+  downloadBlob(
+    new Blob([csv], { type: "text/csv;charset=utf-8;" }),
+    "chess-players-template.csv"
+  );
+});
+
+get("playerFile")?.addEventListener("change", async event => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  try {
+    if (!file.name.toLowerCase().endsWith(".csv")) {
+      throw new Error("Please upload CSV. Save your Excel file as CSV first.");
+    }
+
+    importCSV(await file.text());
+  } catch (error) {
+    get("importStatus").textContent = error.message || "Could not import file.";
+  }
+});
+
+updateCertificate();
