@@ -73,7 +73,7 @@ textarea:focus {
 }
 
 .wide-field {
-    margin-top: 18px;
+    margin-top: 8px;
 }
 
 textarea {
@@ -84,8 +84,8 @@ textarea {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
-    margin-top: 18px;
+    gap: 8px;
+    margin-top: 8px;
 }
 
 .import-section label {
