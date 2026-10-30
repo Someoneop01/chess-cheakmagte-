@@ -715,11 +715,7 @@ button:disabled {
     font-size: 12px !important;
     font-weight: 700 !important;
 }
-img[src*="sing3.png"] {
-    width: 180px !important;
-    height: 100px !important;
-    object-fit: contain !important;
-}
+
 img[src*="sing3.png"] {
     width: 300px !important;
     height: 180px !important;
