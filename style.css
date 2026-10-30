@@ -226,7 +226,7 @@ button:disabled {
 /* LOGOS */
 
 .logo-row {
-    height: 75px;
+    height: 65px;
     display: flex;
     align-items: center;
     justify-content: space-around;
