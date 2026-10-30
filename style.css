@@ -249,3 +249,17 @@ button:hover{background:#285c80}
     transition: none !important;
   }
 }
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+@media print {
+  #previewArea {
+    display: none !important;
+  }
+
+  #printPages {
+    display: block !important;
+  }
+}
