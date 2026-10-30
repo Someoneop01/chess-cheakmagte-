@@ -657,13 +657,13 @@ button:disabled {
 
 /* 1. BDCA LOGO */
 .logo-row img[src*="bdca.png"] {
-    width: 90px !important;
+    width: 75px !important;
     height: 70px !important;
 }
 
 /* 2. ABCA LOGO */
 .logo-row img[src*="abca.png"] {
-    width: 90px !important;
+    width: 75px !important;
     height: 70px !important;
 }
 
