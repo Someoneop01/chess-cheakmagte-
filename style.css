@@ -717,7 +717,7 @@ button:disabled {
 }
 
 img[src*="sing3.png"] {
-    width: 300px !important;
-    height: 180px !important;
+    width: 500px !important;
+    height: 300px !important;
     object-fit: fill !important;
 }
