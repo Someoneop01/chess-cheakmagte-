@@ -671,3 +671,18 @@ button:disabled {
 
 </body>
 </html>
+/* LOGO SIZE FIX */
+.logo-row {
+    height: 105px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.logo-row img {
+    width: 175px !important;
+    height: 100px !important;
+    max-width: 175px !important;
+    max-height: 100px !important;
+    object-fit: contain !important;
+}
