@@ -685,4 +685,20 @@ button:disabled {
     max-width: 175px !important;
     max-height: 100px !important;
     object-fit: contain !important;
+  /* FINAL BALANCED LOGO SIZE */
+.logo-row {
+    height: 75px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    margin-bottom: 0 !important;
+}
+
+.logo-row img {
+    width: 130px !important;
+    height: 65px !important;
+    max-width: 130px !important;
+    max-height: 65px !important;
+    object-fit: contain !important;
+}
 }
