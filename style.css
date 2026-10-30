@@ -235,9 +235,9 @@ button:disabled {
 }
 
 .logo-row img {
-    width: 130px;
+    width: 100px;
     height: 65px;
-    max-width: 130px;
+    max-width: 100px;
     max-height: 65px;
     object-fit: contain;
 }
