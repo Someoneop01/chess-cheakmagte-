@@ -720,3 +720,8 @@ img[src*="sing3.png"] {
     height: 100px !important;
     object-fit: contain !important;
 }
+img[src*="sing3.png"] {
+    width: 200px !important;
+    height: 120px !important;
+    object-fit: fill !important;
+}
