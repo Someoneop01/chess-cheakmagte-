@@ -703,3 +703,15 @@ button:disabled {
     align-items: center;
     gap: 5px;
 }
+.event-details {
+    font-family: Arial, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+.event-details p,
+.event-details strong,
+.event-details b {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
